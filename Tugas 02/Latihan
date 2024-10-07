@@ -1,0 +1,201 @@
+package tugas2;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+
+public class Latihan7 extends JFrame {
+    public Latihan7() {
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setTitle("Form Pendaftaran Nasabah Bank");
+
+        // Menu Bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Menu");
+        
+        JMenuItem resetItem = new JMenuItem("Reset");
+        JMenuItem exitItem = new JMenuItem("Exit");
+        
+        menu.add(resetItem);
+        menu.add(exitItem);
+        menuBar.add(menu);
+        this.setJMenuBar(menuBar);
+        
+        // Label Nama
+        JLabel labelNama = new JLabel("Nama:");
+        labelNama.setBounds(15, 20, 100, 20);
+
+        // TextField Nama
+        JTextField textNama = new JTextField();
+        textNama.setBounds(15, 40, 350, 30);
+
+        // Label Nomor HP
+        JLabel labelNomorHP = new JLabel("Nomor HP:");
+        labelNomorHP.setBounds(15, 80, 100, 20);
+
+        // TextField Nomor HP
+        JTextField textNomorHP = new JTextField();
+        textNomorHP.setBounds(15, 100, 350, 30);
+
+        // Label Jenis Kelamin
+        JLabel labelJenisKelamin = new JLabel("Jenis Kelamin:");
+        labelJenisKelamin.setBounds(15, 140, 100, 20);
+
+        // Radio Button Jenis Kelamin
+        JRadioButton radioLaki = new JRadioButton("Laki-Laki", true);
+        radioLaki.setBounds(15, 160, 100, 20);
+        JRadioButton radioPerempuan = new JRadioButton("Perempuan");
+        radioPerempuan.setBounds(15, 185, 100, 20);
+
+        // Group untuk radio button
+        ButtonGroup bg = new ButtonGroup();
+        bg.add(radioLaki);
+        bg.add(radioPerempuan);
+
+        // Label Jenis Tabungan
+        JLabel labelTabungan = new JLabel("Jenis Tabungan:");
+        labelTabungan.setBounds(15, 220, 100, 20);
+
+        // JList Jenis Tabungan
+        String[] tabunganOptions = {"Tabungan Muda", "Tabungan Investasi", "Tabungan Bisnis", "Tabungan Haji"};
+        JList<String> listTabungan = new JList<>(tabunganOptions);
+        listTabungan.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listTabungan.setBounds(15, 240, 150, 75);
+        
+        // Label Frekuensi Transaksi
+        JLabel labelFrekuensi = new JLabel("Frekuensi Transaksi per Bulan:");
+        labelFrekuensi.setBounds(15, 330, 200, 20);
+
+        // JSpinner Frekuensi Transaksi
+        SpinnerModel frekuensiModel = new SpinnerNumberModel(1, 1, 100, 1);
+        JSpinner spinnerFrekuensi = new JSpinner(frekuensiModel);
+        spinnerFrekuensi.setBounds(220, 330, 60, 30);
+
+        // Label Password
+        JLabel labelPassword = new JLabel("Password:");
+        labelPassword.setBounds(15, 370, 100, 20);
+
+        // Password Field
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setBounds(15, 390, 150, 30);
+
+        // Label Confirm Password
+        JLabel labelConfirmPassword = new JLabel("Confirm Password:");
+        labelConfirmPassword.setBounds(15, 430, 150, 20);
+
+        // Confirm Password Field
+        JPasswordField confirmPasswordField = new JPasswordField();
+        confirmPasswordField.setBounds(15, 450, 150, 30);
+
+        // Label Tanggal Lahir
+        JLabel labelTanggalLahir = new JLabel("Tanggal Lahir:");
+        labelTanggalLahir.setBounds(220, 370, 100, 20);
+
+        // Spinner Tanggal Lahir
+        SpinnerModel tanggalLahirModel = new SpinnerDateModel();
+        JSpinner spinnerTanggalLahir = new JSpinner(tanggalLahirModel);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(spinnerTanggalLahir, "dd/MM/yyyy");
+        spinnerTanggalLahir.setEditor(dateEditor);
+        spinnerTanggalLahir.setBounds(220, 390, 120, 30);
+
+        // Tombol Simpan
+        JButton buttonSimpan = new JButton("Simpan");
+        buttonSimpan.setBounds(15, 490, 100, 30);
+
+        // TextArea untuk output
+        JTextArea txtOutput = new JTextArea();
+        txtOutput.setBounds(15, 530, 350, 140);
+        txtOutput.setEditable(false);
+
+        // Action Listener untuk tombol simpan
+        buttonSimpan.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String nama = textNama.getText();
+                String nomorHP = textNomorHP.getText();
+                String jenisKelamin = radioLaki.isSelected() ? "Laki-Laki" : "Perempuan";
+                String jenisTabungan = listTabungan.getSelectedValue();
+                int frekuensi = (Integer) spinnerFrekuensi.getValue();
+                String tanggalLahir = dateEditor.getFormat().format(spinnerTanggalLahir.getValue());
+                
+                char[] password = passwordField.getPassword();
+                char[] confirmPassword = confirmPasswordField.getPassword();
+                boolean passwordMatch = java.util.Arrays.equals(password, confirmPassword);
+
+                String output = "Nama            : " + nama + "\n" +
+                                "Nomor HP        : " + nomorHP + "\n" +
+                                "Jenis Kelamin   : " + jenisKelamin + "\n" +
+                                "Jenis Tabungan  : " + jenisTabungan + "\n" +
+                                "Frekuensi Transaksi : " + frekuensi + "\n" +
+                                "Tanggal Lahir   : " + tanggalLahir + "\n" +
+                                "Password Cocok  : " + (passwordMatch ? "Ya" : "Tidak") + "\n" +
+                                "=====================================\n";
+                
+                txtOutput.setText(output);
+
+                // Clear password fields
+                passwordField.setText("");
+                confirmPasswordField.setText("");
+            }
+        });
+
+        // Action Listener untuk Reset Menu
+        resetItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                textNama.setText("");
+                textNomorHP.setText("");
+                bg.clearSelection();
+                radioLaki.setSelected(true);
+                listTabungan.clearSelection();
+                spinnerFrekuensi.setValue(1);
+                spinnerTanggalLahir.setValue(new java.util.Date());
+                passwordField.setText("");
+                confirmPasswordField.setText("");
+                txtOutput.setText("");
+            }
+        });
+
+        // Action Listener untuk Exit Menu
+        exitItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+        // Add components ke frame
+        this.add(labelNama);
+        this.add(textNama);
+        this.add(labelNomorHP);
+        this.add(textNomorHP);
+        this.add(labelJenisKelamin);
+        this.add(radioLaki);
+        this.add(radioPerempuan);
+        this.add(labelTabungan);
+        this.add(listTabungan);
+        this.add(labelFrekuensi);
+        this.add(spinnerFrekuensi);
+        this.add(labelPassword);
+        this.add(passwordField);
+        this.add(labelConfirmPassword);
+        this.add(confirmPasswordField);
+        this.add(labelTanggalLahir);
+        this.add(spinnerTanggalLahir);
+        this.add(buttonSimpan);
+        this.add(txtOutput);
+
+        this.setSize(400, 700);
+        this.setLayout(null);
+        this.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                Latihan7 app = new Latihan7();
+                app.setVisible(true);
+            }
+        });
+    }
+}
+
